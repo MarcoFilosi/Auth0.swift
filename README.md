@@ -5,7 +5,6 @@
 [![Version](https://img.shields.io/cocoapods/v/Auth0.svg?style=flat-square)](https://cocoadocs.org/docsets/Auth0)
 [![License](https://img.shields.io/cocoapods/l/Auth0.svg?style=flat-square)](https://cocoadocs.org/docsets/Auth0)
 [![Platform](https://img.shields.io/cocoapods/p/Auth0.svg?style=flat-square)](https://cocoadocs.org/docsets/Auth0)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat-square)](https://github.com/Carthage/Carthage)
 ![Swift 5.2](https://img.shields.io/badge/Swift-5.2-orange.svg?style=flat-square)
 
 Swift toolkit that lets you communicate efficiently with many of the [Auth0 API](https://auth0.com/docs/api/info) functions and enables you to seamlessly integrate the Auth0 login.
@@ -39,7 +38,7 @@ Swift toolkit that lets you communicate efficiently with many of the [Auth0 API]
 If you are using [Cocoapods](https://cocoapods.org), add this line to your `Podfile`:
 
 ```ruby
-pod 'Auth0', '~> 1.25'
+pod 'Auth0', '~> 1.26'
 ```
 
 Then run `pod install`.
@@ -51,7 +50,7 @@ Then run `pod install`.
 If you are using [Carthage](https://github.com/Carthage/Carthage), add the following line to your `Cartfile`:
 
 ```ruby
-github "auth0/Auth0.swift" ~> 1.25
+github "auth0/Auth0.swift" ~> 1.26
 ```
 
 Then run `carthage bootstrap`.
@@ -202,6 +201,25 @@ Auth0
         switch result {
         case .success(let credentials):
             print("Obtained new credentials: \(credentials)")
+        case .failure(let error):
+            print("Failed with \(error)")
+        }
+    }
+```
+
+#### Disable Single Sign On (iOS 13+ / macOS)
+
+Add the `useEphemeralSession()` method to the chain to disable SSO on iOS 13+ and macOS. This way the system will not display the consent popup that otherwise shows up when SSO is enabled. It has no effect on older versions of iOS.
+
+```swift
+Auth0
+    .webAuth()
+    .audience("https://{YOUR_AUTH0_DOMAIN}/userinfo")
+    .useEphemeralSession()
+    .start { result in
+        switch result {
+        case .success(let credentials):
+            print("Obtained credentials: \(credentials)")
         case .failure(let error):
             print("Failed with \(error)")
         }
